@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷等级</title>
+    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/notice.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/exam_bg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+        .container .row{
+            display: inline-block;
+            width: 40%;
+            margin-top: 38vh;
+        }
+        .container li{
+            background: url(images/subtitle_bg1.png) no-repeat center;
+            background-size: contain;
+            height: 10vh;
+            float: left;
+            width: 100%;
+            position: relative;
+        }
+        .container li a {
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 600;
+            height: 10vh;
+            line-height: 10vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="row clearfix">
+            <li class="1" id="c_A"><a>(A)简单</a></li>
+            <li class="2" id="c_B"><a>(B)中等</a></li>
+            <li class="3" id="c_C"><a>(C)困难</a></li>
+        </ul>
+    </div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/ws.js"></script>
+<script src="js/notice.js"></script>
+<script>
+    localStorage.categoryid = window.location.href.split('?')[1].split('&')[0].split('=')[1];
+    $("ul li").click(function(){
+        localStorage.level = $(this).attr("class");
+        getQuestions();
+    })
+
+    function getQuestions(){
+        $.ajax({
+            type:"GET",
+            url:localStorage.apiUrl+"/front.examination/getExamination",
+            dataType:"json",
+            data:{
+                level:localStorage.level,
+                category_id:localStorage.categoryid
+            },
+            success:function(data){
+                if(data){
+                    var examid = data.id;
+                    $.ajax({
+                        type:"GET",
+                        url:localStorage.apiUrl+"/front.examination/getQuestionList",
+                        dataType:"json",
+                        data:{
+                            examination_id:examid
+                        },
+                        success:function(res){
+                            if (res.length==0){
+                                // alert('此难度未设置题目');
+                                new NoticeJs({
+                                    text: '此难度未设置题目',
+                                    position: 'middleCenter',
+                                }).show();
+                                return;
+                            }
+                            console.log(res)
+                            localStorage.questionArr=JSON.stringify(res);
+                            location.href='modeChoose.html';
+                        }
+                    });
+                }
+
+            }
+
+        });
+    }
+
+    var lastData='';
+    ws.onmessage=function (data) {
+        data=getWsData(data);
+        console.log(data)
+
+        if (data[1]!=lastData){
+            lastData=data[1];
+			console.log(lastData)
+            if (data[1]=='D'){
+                location.href="/examList.html"
+            }else{
+				href=$('#c_'+data[1]).click();
+			}
+            
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷列表</title>
+    <link rel="stylesheet" href="css/public.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/exam_bg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+        .container .row{
+            display: inline-block;
+            width: 50%;
+            margin-top: 40vh;
+        }
+        .container li{
+            background: url(images/subtitle_bg.png) no-repeat center;
+            background-size: contain;
+            height: 12vh;
+            float: left;
+            width: calc(50% - 40px);
+            box-sizing: border-box;
+            position: relative;
+            margin: 0 20px;
+        }
+        .container li a {
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 12vh;
+            line-height: 12vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="row clearfix">
+
+        </ul>
+    </div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/ws.js"></script>
+<script>
+    $.ajax({
+        type:"GET",
+        url:localStorage.apiUrl+"/front.examination/getCategoryList",
+        dataType:"json",
+        success:function(data){
+            console.log(data)
+            if(data.length > 0){
+                for(var i in data){
+                    $("ul").append("<li id='next_"+['A','B','C','D'][i]+"'><a href=\"examLevel.html?categoryid="+data[i].id+"\">"+'('+['A','B','C','D'][i]+')'+data[i].name+"</a></li>");
+                }
+            }
+        }
+    });
+
+
+    ws.onmessage=function (data) {
+        data=getWsData(data);
+        href=$('#next_'+data[1]).find('a').attr('href');
+        console.log(666,data,href)
+		if(href.length>0){
+			console.log(href)
+			location.href=href;
+		}
+        
+    }
+
+</script>
+</html>

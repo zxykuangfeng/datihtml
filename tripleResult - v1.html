@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>党建pk</title>
+		<link href="css/common.css" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery.min.js"></script>
+		<script>
+			$(function() {
+				$(".btn").animate({
+					"height": "80px"
+				}, 1000);
+				$("#leftbox").animate({
+					"height": "100%"
+				}, 500);
+				$("#midbox").animate({
+					"height": "100%"
+				}, 600);
+				$("#rightbox").animate({
+						"height": "100%"
+					}, 700,
+					function() {
+						$("#coverbox").animate({
+							opacity: "1"
+						}, 500);
+					});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="coverbox">
+			<div id="leftbox">
+				<div class="box">
+					<h3>NO. 1</h3>
+					<div class="boxTt">A</div>
+					<div class="boxInfo">
+						<p>得分：<span data-name="score1"></span>分</p>
+						<p>答题数：<span data-name="totalNum1"></span>分</p>
+						<p>答对题次数：<span data-name="corrNum1"></span>分</p>
+					</div>
+				</div>
+			</div>
+			<div id="midbox">
+				<div class="box">
+					<h3>NO. 2</h3>
+					<div class="boxTt">B</div>
+					<div class="boxInfo">
+						<p>得分：5分</p>
+						<p>答题数：5分</p>
+						<p>答对题次数：5分</p>
+					</div>
+				</div>
+			</div>
+			<div id="rightbox">
+				<div class="box">
+					<h3>NO. 3</h3>
+					<div class="boxTt">C</div>
+					<div class="boxInfo">
+						<p>得分：5分</p>
+						<p>答题数：5分</p>
+						<p>答对题次数：5分</p>
+					</div>
+				</div>
+			</div>
+			<div class="btn">
+				<a href="#">重新挑战</a><a href="#">返回首页</a>
+			</div>
+		</div>
+
+		<script>
+			$('.boxInfo span').each(function(data){
+				let name=$(this).data('name');
+				console.log(name,localStorage.getItem(name));
+				$(this).html(localStorage.getItem(name));
+			})
+		</script>
+
+	</body>
+</html>

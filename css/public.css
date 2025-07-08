@@ -1,0 +1,60 @@
+*{
+    font-size: 14px;
+    font-family: "微软雅黑";
+    margin: 0;
+    padding: 0;
+}
+a {
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+    color: currentColor;
+}
+li{
+    list-style: none;
+}
+body{
+    height:100%;
+}
+input{
+    outline: none;
+}
+/* 清理浮动 */
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after{
+    content: "\20";
+    display: block;
+    height: 0;
+    font-size:0;
+    clear: both;
+    visibility: hidden;
+}
+.clearfix{
+    clear: both;
+    *zoom:1;/* for IE6 IE7 */
+}
+
+/* 隐藏, 通常用来与 JS 配合 */
+.display {
+    display: block;
+}
+.hidden {
+    display: none;
+}
+
+/* 设置内联, 减少浮动带来的bug */
+.fl_left {
+    float: left;
+}
+.fl_right {
+    float: right;
+}
+
+.container{
+    height: 100%;
+    min-height: 100vh;
+    background: #fafafa;
+}

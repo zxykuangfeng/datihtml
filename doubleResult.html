@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>双人答题结果</title>
+    <link rel="stylesheet" href="css/public.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/result_bg.png) no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+        }
+        .resultbox{
+            text-align: center;
+            background: url(images/result_bg1.png) no-repeat;
+            background-size: 100% 100%;
+            background-position-y: 5vh;
+            position: relative;
+            width: 30vw;
+            height: 35vh;
+            margin: auto;
+            padding-top: 35vh;
+        }
+        .pkitem {
+            width: 65%;
+            margin: 2vh auto;
+            padding: 1vh 0;
+        }
+        .pkitem p {
+            color: #ad6324;
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+        .itembox span {
+            color: #fff;
+            font-size: 1rem;
+            width: 4vw;
+        }
+        .left_item, .right_item {
+            float: left;
+            width: 50%;
+        }
+        .itembox>.row{
+            background: #fff;
+            height: 2vh;
+            width: 11vw;
+            border-radius: 2vh;
+        }
+        .left_item .row {
+            background: #24adef;
+            height: 2vh;
+            float: right;
+            border-top-left-radius: 1vh;
+            border-bottom-left-radius: 1vh;
+        }
+        .right_item .row {
+            background: #ff5189;
+            height: 2vh;
+            float: left;
+            border-top-right-radius: 1vh;
+            border-bottom-right-radius: 1vh;
+        }
+        .score .left_item .row{
+            /* width: 100%; */
+        }
+        .score .right_item .row{
+            /* width: 90%; */
+        }
+        .answerNum .left_item .row{
+            /* width: 100%; */
+        }
+        .answerNum .right_item .row{
+            width: 100%;
+        }
+        .correctNum .left_item .row{
+            /* width: 60%; */
+        }
+        .correctNum .right_item .row{
+            width: 40%;
+        }
+        .btnbox a {
+            background: url(images/subtitle_bg4.png) no-repeat center;
+            display: inline-block;
+            width: 35%;
+            height: 4vh;
+            line-height: 4vh;
+            background-size: contain;
+            margin-top: 2vh;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+        #result{
+            color: #ff2020;
+            position: relative;
+            top: 24vh;
+            z-index: 1;
+            font-size: 5rem;
+            font-weight: 600;
+            letter-spacing: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p id="result">A胜</p>
+        <div class="resultbox">
+            <div class="score pkitem">
+                <p>得分</p>
+                <div class="itembox">
+                    <span class="fl_left scoreA">0</span>
+                    <div class="row fl_left">
+                        <div class="left_item"><div class="row"></div></div>
+                        <div class="right_item"><div class="row"></div></div>
+                    </div>
+                    <span class="fl_right scoreB">0</span>
+                </div>
+            </div>
+            <div class="answerNum pkitem">
+                <p>答题数</p>
+                <div class="itembox">
+                    <span class="fl_left scoreA">0</span>
+                    <div class="row fl_left">
+                        <div class="left_item"><div class="row"></div></div>
+                        <div class="right_item"><div class="row"></div></div>
+                    </div>
+                    <span class="fl_right scoreB">0</span>
+                </div>
+            </div>
+            <div class="correctNum pkitem">
+                <p>答对题次数</p>
+                <div class="itembox">
+                    <span class="fl_left scoreA">0</span>
+                    <div class="row fl_left">
+                        <div class="left_item"><div class="row"></div></div>
+                        <div class="right_item"><div class="row"></div></div>
+                    </div>
+                    <span class="fl_right scoreB">0</span>
+                </div>
+            </div>
+            <div class="btnbox">
+                <a href="modeChoose.html">重新挑战</a>
+<!--                <a href="doubleExam.html">重新挑战</a>-->
+                <a href="home.html">返回首页</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script>
+    $(function(){
+        var totalNum1 = localStorage.totalNum1,
+        corrNum1 = localStorage.corrNum1,
+        score1 = localStorage.score1;
+
+        var totalNum2 = localStorage.totalNum2,
+        corrNum2 = localStorage.corrNum2,
+        score2 = localStorage.score2;
+
+        var dtotal = localStorage.dtotal;
+        var queslength = localStorage.queslength;
+
+        $(".score .scoreA").text(score1)
+        $(".score .scoreB").text(score2)
+        $(".answerNum .scoreA").text(totalNum1)
+        $(".answerNum .scoreB").text(totalNum2)
+        $(".correctNum .scoreA").text(corrNum1)
+        $(".correctNum .scoreB").text(corrNum2)
+
+        $(".score .left_item .row").css("width",score1/dtotal*100+"%")
+        $(".score .right_item .row").css("width",score2/dtotal*100+"%")
+        if(totalNum1 == 0){
+            $(".answerNum .left_item .row").css("width","0%");
+            $(".correctNum .left_item .row").css("width","0%");
+        }else{
+            $(".answerNum .left_item .row").css("width",totalNum1/queslength*100+"%");
+            $(".correctNum .left_item .row").css("width",corrNum1/totalNum1*100+"%");
+        }
+        if(totalNum2 == 0){
+            $(".answerNum .right_item .row").css("width","0%");
+            $(".correctNum .right_item .row").css("width","0%");
+        }else{
+            $(".answerNum .right_item .row").css("width",totalNum2/queslength*100+"%");
+            $(".correctNum .right_item .row").css("width",corrNum2/totalNum2*100+"%");
+        }
+    })
+</script>
+</html>

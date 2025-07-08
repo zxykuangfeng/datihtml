@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单人答题答题</title>
+    <link rel="stylesheet" href="css/public.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/examdtl_bg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+        .top {
+            height: 16vh;
+            background: #1c68b2;
+        }
+        .top .top_left {
+            float: left;
+            position: relative;
+            color: #fff;
+            padding-top: 2vh;
+            margin-left: 5vw;
+        }
+        .photo {
+            width: 12vh;
+            background: red;
+            height: 12vh;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        .photo img {
+            width: 100%;
+            height: 100%;
+        }
+        .name {
+            font-size: 2rem;
+            margin-left: 2vw;
+        }
+        .top .top_right {
+            float: right;
+            position: relative;
+            color: #fff;
+            margin-right: 5vw;
+        }
+        .top_right p {
+            display: inline-block;
+            font-size: 2rem;
+            margin: 0 1vw;
+            margin-top: 5vh;
+            /*margin-top: calc((18vh - 3.5rem) / 2);*/
+        }
+        .top_right p img {
+            width: 3vw;
+            vertical-align: middle;
+            margin-right: 0.5vw;
+        }
+        .top_right p span {
+            font-size: 2rem;
+        }
+        .top .top_left .row span {
+            font-size: 5rem;
+            height: 7.5vh;
+            line-height: 7.5vh;
+            margin: 0 2vw;
+        }
+        .content{
+            padding: 2rem 0;
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 3rem;
+        }
+        .content p {
+            text-align: left;
+            color: #333;
+            font-size: 2rem;
+            line-height: 3.5rem;
+        }
+        .content p:not(.title){
+            text-indent: 2em;
+            width: 50%;
+            float: left;
+            margin-top: 4vh;
+            background: url(./images/option.png) no-repeat;
+            background-size: contain;
+            line-height: 3vh;
+        }
+        .content p.active{
+            background: url("./images/option_active.png") no-repeat;
+            background-size: contain;
+            line-height: 3vh;
+        }
+        .content p span {
+            font-size: 2rem;
+            color: #333;
+        }
+        .footer{
+            position: fixed;
+            width: 100%;
+            color: #fff;
+            font-size: 2.5rem;
+            bottom: 0;
+            right: 2vw;
+            text-align: right;
+        }
+        #time {
+            display: inline-block;
+            width: 8vw;
+            color: #fff;
+            font-size: 8rem;
+            z-index: 2;
+            text-align: center;
+         }
+        .footer img{
+            width: 3vw;
+            vertical-align: text-bottom;
+            margin-right: 0.5vw;
+        }
+        .container:after{
+            position: absolute;
+            bottom: 5vh;
+            right: 25vw;
+            width: 16rem;
+            opacity: 0;
+            transform-origin: 50% 50%;
+            transform: scale3d(0.1,0,2);
+            transition: all .3s cubic-bezier(0.6, 0.04, 0.98, 0.335);
+        }
+        .active.correct.container:after {
+            content: url("./images/correct.png");
+            opacity: .75;
+            transform: scale(0.5);
+        }
+        .active.error.container:after {
+            content: url("./images/error.png");
+            opacity: .75;
+            transform: scale(0.5);
+        }
+
+        .analysis {
+            text-align: left;
+            width: 80%;
+            margin: 5vh auto;
+            font-size: 2rem;
+            color: #666;
+        }
+        .analysis p {
+            text-align: left;
+            font-size: 1.8rem;
+            color: #666;
+            padding-left: 2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container active">
+    <div class="top clearfix">
+        <div class="top_left">
+            <div class="photo"><img src="" alt=""></div>
+            <span class="name"></span>
+        </div>
+        <div class="top_right">
+            <p class="totalNum"><img src="./images/totalNum.png">答题次数<span>0</span></p>
+            <p class="corrNum"><img src="./images/corNum.png">答对次数<span>0</span></p>
+            <p class="errNum"><img src="./images/errNum.png">答错次数<span>0</span></p>
+        </div>
+    </div>
+    <div class="content clearfix">
+        <p class="title"></p>
+        <p class="opt A"><span class="op"></span><span class="cont"></span></p>
+        <p class="opt B"><span class="op"></span><span class="cont"></span></p>
+        <p class="opt C"><span class="op"></span><span class="cont"></span></p>
+        <p class="opt D"><span class="op"></span><span class="cont"></span></p>
+    </div>
+    <div class="analysis" style="display: none;">解析：<p></p></div>
+    <div class="footer"><img src="./images/countdown.png" >倒计时<div id="time">10</div></div>
+</div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script>
+    var ws=new WebSocket(localStorage.wsUrl)
+    var optionsss="";
+    var da=[],index = 0,time=0,showDjs=0;
+    var lastmsg='';
+    var lock=0;
+    var stotal = 0;
+    var score=0;
+    var type=0;
+    var jx_time=5;
+
+    $(".top .photo img").attr("src",localStorage.singleImgSrc);
+    $(".top .name").text(localStorage.singleUsername)
+
+    var res=JSON.parse(window.localStorage.questionArr)
+    console.log(res)
+    for(var i in res){
+        stotal = stotal + parseInt(res[i].score);
+    }
+    localStorage.stotal = stotal;
+    localStorage.singlequeslength = res.length;
+    da = res;
+    nextQuestion(0);
+
+    function nextQuestion(index){
+        $('p.opt').removeClass("active")
+        if(index == da.length){
+            localStorage.totalNum = $(".top_right .totalNum span").text();
+            localStorage.corrNum = $(".top_right .corrNum span").text();
+            localStorage.score = score;
+            window.location.href = "./singleResult.html";
+        }
+        showDjs = 1;
+        time = 11;
+        lastmsg='';
+        lock=0;
+        setQuestion(index);
+        getRandomCode();
+    }
+    function setQuestion(i){
+        $(".opt span").text("");
+        $(".content .title").text(da[i].question);
+        var options = JSON.parse(da[i].options);
+        if(options.length>2){
+            type=1;
+            $(".A .op").text(options[0].option);
+            $(".A .cont").text("、"+options[0].content);
+            $(".B .op").text(options[1].option);
+            $(".B .cont").text("、"+options[1].content);
+            $(".C .op").text(options[2].option);
+            $(".C .cont").text("、"+options[2].content);
+            $(".D .op").text(options[3].option);
+            $(".D .cont").text("、"+options[3].content);
+        }else{
+            type=2;
+            $(".A .op").text(options[0].option);
+            $(".A .cont").text("、"+options[0].content);
+            $(".B .op").text(options[1].option);
+            $(".B .cont").text("、"+options[1].content);
+        }
+    }
+
+    function showJX(i){
+
+        $(".footer").show();
+        $(".analysis").show();
+        $(".analysis p").text(da[i].analysis);
+
+        jx_time=5;
+        $('#time').text(jx_time);
+        jx_timer=setInterval("--jx_time;$('#time').text(jx_time);",1000)
+
+        setTimeout(function(){
+            index = index+1;
+            $(".analysis").hide();
+            $(".container").removeClass("correct").removeClass("error");
+            clearInterval(jx_timer);
+            nextQuestion(index);
+        },6000)
+    }
+
+    //倒计时
+    function getRandomCode() {
+        if(showDjs == 0){
+            // $(".footer").hide();
+            return;
+        }else{
+            $(".footer").show();
+        }
+        if (time == 0) {
+            // $('.container').addClass('error');
+            $(".container").removeClass("correct").removeClass("error");
+            showJX(index)
+            return;
+        } else {
+            time--;
+            $('#time').text(time);
+        }
+        setTimeout(function() {
+            getRandomCode();
+        },1000);
+    }
+
+
+    ws.onmessage=function(data){
+        if(data.data == "connect success"){
+            return;
+        }
+        var data = data.data;
+        var user = data.substr(0,1);
+        var choose = data.substr(data.length-1,1);
+        if (type==2){
+            if (choose=='C' || choose=='D'){
+                return;
+            }
+        }
+        if(data.data==lastmsg || lock==1){
+            return;
+        }else{
+            lastmsg=data.data;
+            lock=1;
+        }
+
+        // $(".footer").hide();
+        showDjs = 0;
+        $("p.opt").each(function(){
+            if(choose == $(this).find(".op").text()){
+                $(this).addClass("active").siblings().removeClass("active")
+            }
+        });
+        $(".top_right .totalNum span").text(parseInt($(".top_right .totalNum span").text()) + 1);
+        if(choose == da[index].answer){
+            $(".top_right .corrNum span").text(parseInt($(".top_right .corrNum span").text()) + 1);
+            $('.container').addClass('correct');
+            score = score + parseInt(da[index].score);
+        }else{
+            $(".top_right .errNum span").text(parseInt($(".top_right .errNum span").text()) + 1);
+            $('.container').addClass('error');
+        }
+
+        showJX(index);
+    }
+
+    setTimeout("ws.send('browser'),optionsss=''",1000)
+
+</script>
+</html>

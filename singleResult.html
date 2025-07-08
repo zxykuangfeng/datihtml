@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单人答题结果</title>
+    <link rel="stylesheet" href="css/public.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/result_bg2.png) no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+        }
+        .resultbox{
+            text-align: center;
+            background: url(images/result_bg3.png) no-repeat;
+            background-size: 100% 100%;
+            background-position-y: 10vh;
+            position: relative;
+            width: 30vw;
+            height: 50vh;
+            margin: auto;
+            padding-top: 25vh;
+        }
+        .infoimg {
+            display: block;
+            text-align: center;
+            margin: 0 auto;
+            width: 6vw;
+            height: 6vw;
+            background: red;
+            border-radius: 50%;
+            border: 4px solid #fff;
+        }
+        p.name {
+            margin-bottom: 1vh;
+        }
+        .resultbox>p{
+            color: #87460f;
+            font-size: 1.3rem;
+            font-weight: 600;
+            padding: 1.5vh 0;
+        }
+        .resultbox>p span{
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .btnbox a {
+            background: url(images/subtitle_bg4.png) no-repeat center;
+            display: inline-block;
+            width: 35%;
+            height: 4vh;
+            line-height: 4vh;
+            background-size: contain;
+            margin-top: 2vh;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="resultbox">
+            <img class="infoimg" src="" alt="">
+            <p class="name"></p>
+            <p class="res score">您的成绩为：<span>0</span>分</p>
+            <p class="res answerNum">您的答题数为：<span>0</span>道</p>
+            <p class="res correctNum">您的答对题次数为：<span>0</span>次</p>
+            <div class="btnbox">
+                <a href="modeChoose.html">重新挑战</a>
+                <a href="home.html">返回首页</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script>
+    $(function(){
+        $(".resultbox .infoimg").attr("src",localStorage.singleImgSrc);
+        $(".resultbox .name").text(localStorage.singleUsername)
+        var totalNum = localStorage.totalNum,
+        corrNum = localStorage.corrNum,
+        score = localStorage.score;
+        var stotal = localStorage.stotal;
+        var singlequeslength = localStorage.singlequeslength;
+
+        $(".score span").text(score)
+        $(".answerNum span").text(totalNum)
+        $(".correctNum span").text(corrNum)
+ 
+    })
+</script>
+</html>

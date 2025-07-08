@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单人模式-人脸识别</title>
+    <link rel="stylesheet" href="css/public.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/verify_bg.png) no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+        }
+        .userinfo {
+            width: 30vw;
+            color: #fff;
+            position: absolute;
+            right: 12vw;
+            top: 20vh;
+            height: 60vh;
+            border-radius: 1rem;
+            box-shadow: 0px 0px 20px #00adff;
+        }
+        .imgbox>div{
+            display: inline-block;
+            background: #dcdcdc;
+            margin: 4vh 1vw;
+            color: #333;
+            position: relative;
+            width: 11vw;
+            height: 22vh;
+        }
+        .imgbox>div>p{
+            background: #fff;
+            width: 3vw;
+            height: 19vh;
+            font-size: 2.5rem;
+            padding-top: 3vh;
+            float: left;
+        }
+        .imgbox>div>div{
+            width: 9vw;
+            height: 100%;
+            float: left;
+        }
+        .userinfo>p{
+            text-align: left;
+            font-size: 1.5rem;
+            margin: 3vh 3vw;
+        }
+        .userinfo>p span{
+            color: #58dbff;
+            font-size: 1.5rem;
+        }
+        .btnbox{
+            position: fixed;
+            bottom: 7vh;
+            left: 39vw;
+            text-align: center;
+            color: #fff;
+        }
+        .btnbox a{
+            background: url(images/subtitle_bg4.png) no-repeat;
+            display: inline-block;
+            width: 8vw;
+            height: 5vh;
+            font-weight: 600;
+            background-size: contain;
+            line-height: 4vh;
+            margin: 0 2vw;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="face"></div>
+        <div class="userinfo">
+            <div class="imgbox">
+                <div class="img-identify clearfix">
+                    <p>证件照</p>
+                    <div class="identify-box"></div>
+                </div>
+                <div class="img-scene clearfix">
+                    <p>现场照</p>
+                    <div class="scene-box"></div>
+                </div>
+            </div>
+            <p class="name">姓名：<span>张三</span></p>
+            <p class="sex">性别：<span>男</span></p>
+            <p class="birth">出生：<span>19960229</span></p>
+            <p class="identify">身份证号：<span>320901199602291245</span></p>
+        </div>
+        <div class="btnbox">
+            <a href="singleExam.html">确认信息</a>
+            <a href="##">重新识别</a>
+        </div>
+    </div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+</html>

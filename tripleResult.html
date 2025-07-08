@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>党建pk</title>
+		<link href="css/common.css" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery.min.js"></script>
+		<script>
+			$(function() {
+				$(".btn").animate({
+					"height": "80px"
+				}, 1000);
+				$("#leftbox").animate({
+					"height": "100%"
+				}, 500);
+				$("#midbox").animate({
+					"height": "100%"
+				}, 600);
+				$("#rightbox").animate({
+						"height": "100%"
+					}, 700,
+					function() {
+						$("#coverbox").animate({
+							opacity: "1"
+						}, 500);
+					});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="coverbox">
+			<div id="leftbox">
+				<div class="box">
+					<div class="headImg">
+						<img id="img0">
+					</div>
+					<h4></h4>
+					<div class="boxTt" id="name0"></div>
+					<div class="boxInfo">
+						<p>得分：<span data-name="score1"></span>分</p>
+						<p>答题数：<span data-name="totalNum1"></span>分</p>
+						<p>答对题次数：<span data-name="corrNum1"></span>分</p>
+					</div>
+				</div>
+			</div>
+			<div id="midbox">
+				<div class="box">
+					<div class="headImg">
+						<img id="img1">
+					</div>
+					<h4></h4>
+					<div class="boxTt" id="name1"></div>
+					<div class="boxInfo">
+						<p>得分：<span data-name="score2"></span>分</p>
+						<p>答题数：<span data-name="totalNum2"></span>分</p>
+						<p>答对题次数：<span data-name="corrNum2"></span>分</p>
+					</div>
+				</div>
+			</div>
+			<div id="rightbox">
+				<div class="box">
+					<div class="headImg">
+						<img id="img2">
+					</div>
+					<h4></h4>
+					<div class="boxTt" id="name2"></div>
+					<div class="boxInfo">
+						<p>得分：<span data-name="score3"></span>分</p>
+						<p>答题数：<span data-name="totalNum3"></span>分</p>
+						<p>答对题次数：<span data-name="corrNum3"></span>分</p>
+					</div>
+				</div>
+			</div>
+			<div class="btn">
+				<a href="tripleExam.html" id='redo'>重新挑战(A)</a><a href="home.html" id='toindex'>返回首页(B)</a>
+			</div>
+		</div>
+		
+		<script src="js/config.js"></script>
+		<script src="js/ws.js"></script>
+
+		<script>
+			$('.boxInfo span').each(function(data){
+				let name=$(this).data('name');
+				console.log(name,localStorage.getItem(name));
+				$(this).html(localStorage.getItem(name));
+			})
+
+			showHeadImg();
+			function showHeadImg(){
+				var users=[JSON.parse(window.localStorage.user1),JSON.parse(window.localStorage.user2),JSON.parse(window.localStorage.user3)];
+				for (u in users){
+					if (users[u]!=null){
+						$('#img'+u).attr('src',users[u].headurl);
+						$('#name'+u).html(users[u].username);
+					}else{
+						$('#img'+u).attr('src','./images/jingcha.png');
+						$('#name'+u).html('');
+					}
+				}
+			}
+			
+			
+			ws.onmessage=function(data){
+				// var data = data.data;
+				// var choose = data.substr(data.length-1,1);
+				// console.log(choose)
+				// $("ul li").each(function(){
+				//     if(choose == $(this).find("a").text()){
+				//         $(this).addClass("active").siblings().removeClass("active")
+				//     }
+				// });
+
+				data=getWsData(data);
+				if (data[1]=='A'){
+					location.href="tripleExam.html";
+				}
+				if (data[1]=='B'){
+					location.href="home.html";
+				}
+
+			}
+			setTimeout("ws.send('browser'),optionsss=''",1000)
+
+		</script>
+
+	</body>
+</html>

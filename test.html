@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>双人答题答题</title>
+    <link rel="stylesheet" href="css/public.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/examdtl_bg.png) no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+        }
+        .top {
+            height: 20vh;
+            position: relative;
+            color: #fff;
+        }
+        .top p {
+            line-height: 20vh;
+            display: inline-block;
+            font-size: 2rem;
+            padding: 0 0.5vw;
+        }
+        .top p span {
+            font-size: 2rem;
+            padding-left: 0.5vw;
+        }
+        .top .top_left{
+            width: 50%;
+            background: #1c68b2;
+            height: 100%;
+            position: relative;
+        }
+        .top_left .name {
+            font-size: 10rem;
+            margin: 0 2vw;
+        }
+        .top_left .score{
+            font-size: 8rem;
+            position: absolute;
+            right: 3vw;
+            z-index: 2;
+            line-height: 20vh;
+        }
+        .top_right .score{
+            font-size: 8rem;
+            position: absolute;
+            left: 3vw;
+            z-index: 2;
+            line-height: 20vh;
+        }
+        .VS{
+            position: absolute;
+            width: 20%;
+            left: 40%;
+            z-index: 1;
+        }
+        .top .top_right {
+            width: 50%;
+            background: #d62418;
+            height: 100%;
+            position: relative;
+        }
+        .top_right .name {
+            font-size: 10rem;
+            margin: 0 2vw;
+        }
+        .content{
+            padding: 2rem 0;
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 3rem;
+        }
+        .content p {
+            text-align: left;
+            color: #333;
+            font-size: 2rem;
+            line-height: 3.5rem;
+        }
+        .content p:not(.title){
+            text-indent: 2em;
+            width: 50%;
+            float: left;
+            margin-top: 4vh;
+            background: url(./images/option.png) no-repeat;
+            background-size: contain;
+            line-height: 3vh;
+        }
+        .content p.active{
+            background: url("./images/option_active.png") no-repeat;
+            background-size: contain;
+            line-height: 3vh;
+        }
+        .content p span {
+            font-size: 2rem;
+            color: #333;
+        }
+        .footer{
+            position: fixed;
+            width: 100%;
+            color: #fff;
+            font-size: 2.5rem;
+            bottom: 0;
+            right: 2vw;
+            text-align: right;
+        }
+        #time {
+            display: inline-block;
+            width: 8vw;
+            color: #fff;
+            font-size: 8rem;
+            z-index: 2;
+            text-align: center;
+        }
+        .footer img{
+            width: 3vw;
+            vertical-align: text-bottom;
+            margin-right: 0.5vw;
+        }
+        .container:after{
+            position: absolute;
+            bottom: 5vh;
+            right: 25vw;
+            width: 16rem;
+            opacity: 0;
+            transform-origin: 50% 50%;
+            transform: scale3d(0.1,0,2);
+            transition: all .3s cubic-bezier(0.6, 0.04, 0.98, 0.335);
+        }
+        .correct.container:after {
+            content: url("./images/correct.png");
+            opacity: .75;
+            transform: scale(0.5);
+        }
+        .error.container:after {
+            content: url("./images/error.png");
+            opacity: .75;
+            transform: scale(0.5);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top clearfix">
+        <div class="top_left fl_left">
+            <div class="name fl_left">A</div>
+            <div class="fl_left">
+                <p class="totalNum">答题次数<span>0</span></p>
+                <p class="corrNum">答对次数<span>0</span></p>
+                <p class="errNum">答错次数<span>0</span></p>
+            </div>
+            <div class="score fl_right">0</div>
+        </div>
+        <img src="./images/vs.png" class="VS" alt="">
+        <div class="top_right fl_right">
+            <div class="name fl_right">B</div>
+            <div class="fl_right">
+                <p class="totalNum">答题次数<span>0</span></p>
+                <p class="corrNum">答对次数<span>0</span></p>
+                <p class="errNum">答错次数<span>0</span></p>
+            </div>
+            <div class="score fl_left">0</div>
+        </div>
+    </div>
+    <div class="content">
+        <p class="title"></p>
+        <p class="opt A"><span class="op"></span><span class="cont"></span></p>
+        <p class="opt B"><span class="op"></span><span class="cont"></span></p>
+        <p class="opt C"><span class="op"></span><span class="cont"></span></p>
+        <p class="opt D"><span class="op"></span><span class="cont"></span></p>
+    </div>
+    <div class="footer"><img src="./images/countdown.png" >倒计时<div id="time">10</div></div>
+    </div>
+</div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script>
+
+    var ws=new WebSocket("ws://127.0.0.1:2345")
+    var optionsss="";
+    $.ajax({
+        type:"GET",
+        url:localStorage.apiUrl+"/front.examination/getExamination",
+        dataType:"json",
+        data:{
+            level:localStorage.level,
+            category_id:localStorage.categoryid
+        },
+        success:function(data){
+            if(data){
+                var examid = data.id;
+                $.ajax({
+                    type:"GET",
+                    url:localStorage.apiUrl+"/front.examination/getQuestionList",
+                    dataType:"json",
+                    data:{
+                        examination_id:examid
+                    },
+                    success:function(da){
+                        console.log(da)
+                        for(var i in da){
+                            $(".opt span").text("");
+                            $(".content .title").text(da[i].question);
+                            var options = JSON.parse(da[i].options);
+                            if(options.length>2){
+                                $(".A .op").text(options[0].option);
+                                $(".A .cont").text("、"+options[0].content);
+                                $(".B .op").text(options[1].option);
+                                $(".B .cont").text("、"+options[1].content);
+                                $(".C .op").text(options[2].option);
+                                $(".C .cont").text("、"+options[2].content);
+                                $(".D .op").text(options[3].option);
+                                $(".D .cont").text("、"+options[3].content);
+                            }else{
+                                $(".A .op").text(options[0].option);
+                                $(".A .cont").text("、"+options[0].content);
+                                $(".B .op").text(options[1].option);
+                                $(".B .cont").text("、"+options[1].content);
+                            }
+                            var time = 41;
+                            getRandomCode()
+                            //倒计时
+                            function getRandomCode() {
+                                if (time == 0) {
+                                    $('.container').addClass('error')
+                                    return;
+                                } else {
+                                    time--;
+                                    $('#time').text(time/4);
+                                    ws.onmessage=function(data){
+                                        var data = data.data;
+                                        var user = data.substr(0,1);
+                                        var choose = data.substr(data.length-1,1);
+                                        $("p.opt").each(function(){
+                                            if(choose == $(this).find(".op").text()){
+                                                $(this).addClass("active").siblings().removeClass("active")
+                                            }
+                                        });
+                                        if(user == 1){
+                                            $(".top_left .totalNum span").text(parseInt($(".top_left .totalNum span").text() + 1));
+                                            if(choose == da[i].answer){
+                                                $(".top_left .corrNum span").text(parseInt($(".top_left .corrNum span").text() + 1));
+                                                $(".top_left .score").text(parseInt($(".top_left .score").text() + parseInt(da[i].score)));
+                                                $('.container').addClass('correct');
+                                                return;
+                                            }else{
+                                                $(".top_left .errNum span").text(parseInt($(".top_left .errNum span").text() + 1));
+                                                $('.container').addClass('error');
+                                                return;
+                                            }
+                                        }else if(user == 2){
+                                            $(".top_right .totalNum span").text(parseInt($(".top_right .totalNum span").text() + 1));
+                                            if(choose == da[i].answer){
+                                                $(".top_right .corrNum span").text(parseInt($(".top_right .corrNum span").text() + 1));
+                                                $(".top_right .score").text(parseInt($(".top_right .score").text() + parseInt(da[i].score)));
+                                                $('.container').addClass('correct');
+                                                return;
+                                            }else{
+                                                $(".top_right .errNum span").text(parseInt($(".top_right .errNum span").text() + 1));
+                                                $('.container').addClass('error');
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                                setTimeout(function() {
+                                    getRandomCode();
+                                },1000);
+                            }
+                        }
+
+
+                    }
+                });
+            }
+
+        }
+
+    });
+
+    setTimeout("ws.send('browser'),optionsss=''",1000)
+
+</script>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模式选择</title>
+    <link rel="stylesheet" href="css/public.css">
+    <style>
+        .container{
+            text-align: center;
+            background: url(images/exam_bg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+        .container .row{
+            display: inline-block;
+            width: 45%;
+            margin-top: 33vh;
+        }
+        .container li{
+            background: url(images/subtitle_bg2.png) no-repeat center;
+            background-size: 80%;
+            height: 12vh;
+            float: left;
+            width: 100%;
+            position: relative;
+        }
+        .container li a {
+            font-size: 2rem;
+            height: 12vh;
+            line-height: 12vh;
+            position: relative;
+            left: 5%;
+            color: #fff;
+            font-weight: 600;
+        }
+        li img{
+            display: none;
+            position: absolute;
+            width: 4vh;
+            top: 4vh;
+            right: 30%;
+        }
+        li img.active{
+            display: block;
+        }
+        .saoma{
+            width: 100%;
+            height: 40vh;
+            position: absolute;
+            top: 30%;
+
+        }
+        .saoma .row{
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            width: 105vh;
+            background: #fafafa;
+        }
+        .saoma img{
+            width: 33vh;
+        }
+        .saoma .tips{
+            font-size: 3vh;
+            text-align: center;
+        }
+        .saoma .row div{
+            text-align: center;
+
+            border-radius: 2px;
+            float: left;
+            padding-right: 1vh;
+            padding-left: 1vh;
+        }
+
+        .subbox{
+            width: 45%;
+            margin: 0 auto;
+            margin-top: 15vh;
+        }
+        .subtitle{
+            background: url(./images/subtitle_bg3.png) no-repeat center;
+            background-size: contain;
+            width: 50%;
+            height: 4vh;
+            float: left;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            line-height: 4vh;
+            font-size: 1.5rem;
+        }
+        .popbox {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            /*background: rgb(0 0 0 / 30%);*/
+        }
+        .popbox .row {
+            background: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            width: 35vh;
+            height: 41vh;
+            text-align: center;
+        }
+        .popbox.popdouble .row {
+            width: 96vh;
+            padding-left: 5vh;
+            padding-right: 5vh;
+        }
+        .popbox .row img {
+            width: 32vh;
+        }
+        .popbox .row div {
+            float: left;
+        }
+        .popbox .row .tips {
+            height: 5vh;
+            line-height: 5vh;
+            font-size: 2vh;
+            color: #666;
+        }
+        .popbox .row .closepop {
+            position: absolute;
+            top: 0;
+            right: 1.5vh;
+            font-size: 1.5rem;
+            height: 5vh;
+            line-height: 5vh;
+            color: #666;
+        }
+        .popbox .loginCont1,
+        .popbox .loginCont2{
+            display: inline-block;
+            width: 32vh;
+            height: 32vh;
+        }
+        .testcontainer{
+            text-align: center;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0 0 0 / 50%);
+        }
+        .testcontainer .row{
+            width: 70%;
+            margin: 0 auto;
+            background: #e6e6e6;
+            height: 60%;
+            margin-top: 15%;
+            position: relative;
+        }
+        .testcontainer .row p{
+            font-size: 7vh;
+            font-weight: 800;
+            color: #b12f2f;
+            height: 27vh;
+            line-height: 27vh;
+        }
+        .testcontainer .row li{
+            float: left;
+            width: 25%;
+        }
+        .testcontainer .row li a{
+            display: inline-block;
+            background: #e98c2f;
+            font-size: 6rem;
+            width: 10rem;
+            height: 10rem;
+            line-height: 10rem;
+            border-radius: 20px;
+            color: #fff;
+            text-align: center;
+            position: relative;
+        }
+        .testcontainer .row li.active a{
+            background-color: #1c68b2;
+            background-image: url(./images/select_active.png);
+            background-repeat: no-repeat;
+            background-size: 20%;
+            background-position: 90% 90%;
+        }
+        .testcontainer .row a.closetest {
+            position: absolute;
+            right: 2vh;
+            top: 2vh;
+            font-size: 5vh;
+            color: #666;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <ul class="row clearfix">
+        <li class="single"><a href="##">单人模式</a></li>
+        <!-- <li><a href="verify.html">单人模式</a></li> -->
+        <li class="doubleMode">
+            <a href="javascript:void(0)">双人模式</a>
+            <img class="" src="./images/arrow.png" alt="">
+        </li>
+    </ul>
+    <div class="subbox clearfix" style="">
+<!--        <a class="subtitle test" href="javascript:void(0);">按键测试</a>-->
+        <a class="subtitle" href="tripleExam.html" style="width: 100%;">进入PK</a>
+    </div>
+</div>
+<div class="popbox popsingle" style="display: none;">
+    <div class="row">
+        <p class="tips">用户扫码登录</p>
+        <div class="loginCont"><img class="singleimg" src="" alt=""></div>
+        <a href="##" class="closepop">×</a>
+    </div>
+</div>
+<div class="saoma">
+    <div class="row">
+        <p class="tips">用户分别扫码登录</p>
+        <div class="loginCont1"><img class="user1" src="" alt=""></div>
+        <div class="loginCont2"><img class="user2" src="" alt=""></div>
+        <div class="loginCont3"><img class="user3" src="" alt=""></div>
+        <div style="clear: both;"></div>
+    </div>
+</div>
+<div class="testcontainer" style="display: none;">
+    <div class="row">
+        <p>按键测试</p>
+        <ul class="clearfix">
+            <li><a href="javascript:void(0)">A</a></li>
+            <li><a href="javascript:void(0)">B</a></li>
+            <li><a href="javascript:void(0)">C</a></li>
+            <li><a href="javascript:void(0)">D</a></li>
+        </ul>
+        <a href="##" class="closetest">×</a>
+    </div>
+</div>
+</body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/ws.js"></script>
+<script>
+    var interval,interval1,interval2,interval3;
+    var user1='',user2='',user3='';
+    getQR();
+
+
+    function getQR(){
+        $.ajax({
+            type:"GET",
+            url:localStorage.apiUrl+"/front.user/getQrcode",
+            dataType:"json",
+            success:function(data){
+                $(".user1").attr("src",data.imgBase64);
+                interval1 =  setInterval(function(){
+                    $.ajax({
+                        data:{rand:data.rand},
+                        type:"GET",
+                        url:localStorage.apiUrl+"/front.user/getQrcodeInfo",
+                        dataType:"json",
+                        success:function(data){
+                            user1=data;
+                            if(data){
+                                clearInterval(interval1);
+                                $(".loginCont1").html("<img src=\""+data.headurl+"\" /><p>"+data.username+"登录成功</p>")
+                            }
+                        }
+                    });
+                },500)
+            }
+        });
+        $.ajax({
+            type:"GET",
+            url:localStorage.apiUrl+"/front.user/getQrcode",
+            dataType:"json",
+            success:function(data2){
+                $(".user2").attr("src",data2.imgBase64)
+                interval2 =  setInterval(function(){
+                    $.ajax({
+                        data:{rand:data2.rand},
+                        type:"GET",
+                        url:localStorage.apiUrl+"/front.user/getQrcodeInfo",
+                        dataType:"json",
+                        success:function(data){
+                            user2=data;
+                            if(data){
+                                clearInterval(interval2);
+                                $(".loginCont2").html("<img src=\""+data.headurl+"\" /><p>"+data.username+"登录成功</p>")
+                            }
+                        }
+                    });
+                },500)
+            }
+        });
+        $.ajax({
+            type:"GET",
+            url:localStorage.apiUrl+"/front.user/getQrcode",
+            dataType:"json",
+            success:function(data3){
+                $(".user3").attr("src",data3.imgBase64)
+                interval3 =  setInterval(function(){
+                    $.ajax({
+                        data:{rand:data3.rand},
+                        type:"GET",
+                        url:localStorage.apiUrl+"/front.user/getQrcodeInfo",
+                        dataType:"json",
+                        success:function(data){
+                            user3=data;
+                            if(data){
+                                clearInterval(interval3);
+                                $(".loginCont3").html("<img src=\""+data.headurl+"\" /><p>"+data.username+"登录成功</p>")
+                            }
+                        }
+                    });
+                },500)
+            }
+        });
+        interval3=setInterval(() => {
+            localStorage.user1 = JSON.stringify(user1);
+            localStorage.user2 = JSON.stringify(user2);
+            localStorage.user3 = JSON.stringify(user3);
+            // if(user1&&user2){
+            //     clearInterval(interval3);
+            //     $(".popbox").hide();
+            //     // $(".doubleMode img").toggleClass("active");
+            //     // $(".subbox").toggle();
+            // }
+        }, 100);
+
+        // $(".doubleMode img").toggleClass("active");
+        // $(".subbox").toggle();
+    }
+
+
+    $(".closepop").click(function(){
+        clearInterval(interval);
+        $(".popbox").hide();
+    })
+    $(".closepop_two").click(function(){
+        clearInterval(interval1);
+        clearInterval(interval2);
+        clearInterval(interval3);
+        // $(".subbox").toggle();
+        $(".doubleMode img").toggleClass("active");
+        $(".popbox").hide();
+    })
+    $(".test").click(function(){
+        $(".testcontainer").show();
+    })
+    $(".closetest").click(function(){
+        $(".testcontainer").hide();
+    })
+</script>
+<script src="./js/config.js"></script>
+<script>
+    $(".row li").click(function(){
+        $(this).addClass("activeA").siblings().removeClass("activeA")
+    })
+
+    var optionsss="";
+    ws.onmessage=function(data){
+        // var data = data.data;
+        // var choose = data.substr(data.length-1,1);
+        // console.log(choose)
+        // $("ul li").each(function(){
+        //     if(choose == $(this).find("a").text()){
+        //         $(this).addClass("active").siblings().removeClass("active")
+        //     }
+        // });
+
+        data=getWsData(data);
+        if (data[1]=='A'){
+            location.href='tripleExam.html';
+        }
+		if (data[1]=='D'){
+            location.href='home.html';
+        }
+
+    }
+    setTimeout("ws.send('browser'),optionsss=''",1000)
+</script>
+</html>
