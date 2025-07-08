@@ -5,17 +5,37 @@
     <title>试卷列表</title>
     <link rel="stylesheet" href="css/public.css">
     <style>
-        .container{
-            text-align: center;
-            background: url(images/exam_bg.png) no-repeat;
-            background-size: 100% 100%;
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
-        .container .row{
+        .container {
+            position: relative;
+            min-height: 100vh;
+            background: url(images/bg.jpg) no-repeat center center;
+            background-size: cover;
+            text-align: center;
+        }
+
+        /* 顶部 title */
+        .header {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .header img {
+            height: 80px;
+        }
+
+        /* 中间试卷列表 */
+        .container .row {
             display: inline-block;
             width: 50%;
-            margin-top: 40vh;
+            margin-top: 25vh;
         }
-        .container li{
+        .container li {
             background: url(images/subtitle_bg.png) no-repeat center;
             background-size: contain;
             height: 12vh;
@@ -36,13 +56,50 @@
             height: 12vh;
             line-height: 12vh;
         }
+
+        /* 底部区域 */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .footer img.bqsy {
+            height: 80px;
+            margin-top: 10px;
+        }
+        .footer .floating-icons {
+            margin-bottom: 10px;
+        }
+        .footer .floating-icons img {
+            /* width: 100px; */
+            margin: 0 20px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .footer .floating-icons img:hover {
+            transform: scale(1.1) translateY(-5px);
+            filter: brightness(1.2);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <ul class="row clearfix">
+        <!-- 顶部标题 -->
+        <div class="header">
+            <img src="images/title.png" alt="标题">
+        </div>
 
-        </ul>
+        <!-- 试卷列表 -->
+        <ul class="row clearfix"></ul>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="floating-icons">
+                <img src="images/dtjfgz.png" alt="图1">
+                <img src="images/dtlhb.png" alt="图2">
+            </div>
+            <img src="images/bqsy.png" alt="版权" class="bqsy">
+        </div>
     </div>
 </body>
 <script src="js/jquery-1.10.1.min.js"></script>
