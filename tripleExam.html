@@ -2,392 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>三人答题</title>
+    <title>单人答题</title>
     <link rel="stylesheet" href="css/public.css">
     <style>
-        .container{
-            text-align: center;
+        body {
+            margin: 0;
+            font-family: sans-serif;
             background: url(images/examdtl_bg.png) no-repeat;
             background-size: 100% 100%;
-            position: relative;
         }
         .top {
-            height: 20vh;
-            position: relative;
+            /*height: 20vh;*/
             color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0,0,0,0.5);
+            padding-bottom: ;
         }
-        .top p {
-            line-height: 6.5vh;
-            /*display: inline-block;*/
-            font-size: 2rem;
-            padding: 0 0.5vw;
-        }
-        .top p span {
-            font-size: 2rem;
-            padding-left: 0.5vw;
-        }
-
-        .content{
-            padding: 2rem 0;
-            width: 80%;
-            margin: 0 auto;
-            margin-top: 3rem;
-        }
-        .content p {
-            text-align: left;
-            color: #333;
-            font-size: 2rem;
-            line-height: 3.5rem;
-        }
-        .content p:not(.title){
-            text-indent: 2em;
-            width: 50%;
-            float: left;
-            margin-top: 4vh;
-            background: url(./images/option.png) no-repeat;
-            background-size: contain;
-            line-height: 3vh;
-        }
-        .content p.active{
-            background: url("./images/option_active.png") no-repeat;
-            background-size: contain;
-            line-height: 3vh;
-        }
-        .content p span {
-            font-size: 2rem;
-            color: #333;
-        }
-        .footer{
-            position: fixed;
-            width: 100%;
-            color: #fff;
-            font-size: 2.5rem;
-            bottom: 0;
-            right: 2vw;
-            text-align: right;
-        }
-        #time {
-            display: inline-block;
-            width: 8vw;
-            color: #fff;
-            font-size: 8rem;
-            z-index: 2;
+        .user {
             text-align: center;
         }
-        .footer img{
-            width: 3vw;
-            vertical-align: text-bottom;
-            margin-right: 0.5vw;
-        }
-        .container:after{
-            position: absolute;
-            bottom: 5vh;
-            right: 25vw;
-            width: 16rem;
-            opacity: 0;
-            transform-origin: 50% 50%;
-            transform: scale3d(0.1,0,2);
-            transition: all .3s cubic-bezier(0.6, 0.04, 0.98, 0.335);
-        }
-        .active.correct.container:after {
-            content: url("./images/correct.png");
-            opacity: .75;
-            transform: scale(0.5);
-        }
-        .active.error.container:after {
-            content: url("./images/error.png");
-            opacity: .75;
-            transform: scale(0.5);
-        }
-        .analysis {
-            text-align: left;
-            width: 80%;
-            margin: 5vh auto;
-            font-size: 2rem;
-            color: #666;
-        }
-        .analysis p {
-            text-align: left;
-            font-size: 1.8rem;
-            color: #666;
-            padding-left: 2rem;
-        }
-
-        .userinfo{
-            width: 33.33%;
-            height: 100%;
-            float: left;
-        }
-        .userinfo div{
-            float: left;
-        }
-        .userinfo .head_img{
-            width: 30%;
-            width: 15vh;
-            padding:2vh;
-        }
-        .userinfo .head_img img{
+        .user img {
             width: 16vh;
             height: 16vh;
-            border-radius: 8vh;
+            border-radius: 50%;
+            margin: 1vh auto;
         }
-        .userinfo .score{
-            font-size: 15vh;
+        .user .stats {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+        .question {
+            width: 80%;
+            margin: 4vh auto;
+            background: #fff;
+            padding: 2vh;
+            border-radius: 1vh;
+        }
+        .question .title {
+            font-size: 2rem;
+            margin-bottom: 2vh;
+        }
+        .question .opt {
+            padding: 1vh;
+            font-size: 1.8rem;
+            margin-bottom: 1vh;
+            background: url(images/option.png) no-repeat left center;
+            background-size: 2rem;
+            padding-left: 3rem;
+            border-radius: .5vh;
+            cursor: pointer;
+        }
+        .question .opt.active {
+            background: url(images/option_active.png) no-repeat left center;
+            background-size: 2rem;
+            background-color: #def;
+        }
+        .analysis {
+            width: 80%;
+            margin: 2vh auto;
+            font-size: 1.6rem;
+            display: none;
+        }
+        .footer {
             text-align: center;
-            width: 36%;
+            font-size: 2rem;
+            color: #fff;
+            padding: 1vh;
         }
-
+         body{
+            height: 1080px;
+        }
     </style>
 </head>
 <body>
-<div class="container active">
-    <div class="top clearfix">
-        <div class="userinfo user1" style="background: #ff2020">
-            <div class="head_img"><img id="img0" src="" alt=""></div>
-            <div class="info">
-                <p class="totalNum">答题次数<span>0</span></p>
-                <p class="corrNum">答对次数<span>0</span></p>
-                <p class="errNum">答错次数<span>0</span></p>
+    <div class="top">
+        <div class="user">
+            <img id="userImg" src="images/jingcha.png" alt="头像">
+            <div class="stats">
+                答题次数: <span id="total">0</span> | 正确: <span id="correct">0</span> | 错误: <span id="wrong">0</span><br>
+                得分: <span id="score">0</span>
             </div>
-            <div class="score">0</div>
-            <div style="clear: both;"></div>
         </div>
-        <div class="userinfo user2" style="background: #f0b608">
-            <div class="head_img"><img id="img1" src="" alt=""></div>
-            <div class="info">
-                <p class="totalNum">答题次数<span>0</span></p>
-                <p class="corrNum">答对次数<span>0</span></p>
-                <p class="errNum">答错次数<span>0</span></p>
-            </div>
-            <div class="score">0</div>
-            <div style="clear: both;"></div>
-        </div>
-        <div class="userinfo user3" style="background: #23a2f0">
-            <div class="head_img"><img id="img2" src="" alt=""></div>
-            <div class="info">
-                <p class="totalNum">答题次数<span>0</span></p>
-                <p class="corrNum">答对次数<span>0</span></p>
-                <p class="errNum">答错次数<span>0</span></p>
-            </div>
-            <div class="score">0</div>
-            <div style="clear: both;"></div>
-        </div>
-        <div style="clear: both;"></div>
     </div>
-    <div class="content clearfix">
-        <p class="title"></p>
-        <p class="opt A"><span class="op"></span><span class="cont"></span></p>
-        <p class="opt B"><span class="op"></span><span class="cont"></span></p>
-        <p class="opt C"><span class="op"></span><span class="cont"></span></p>
-        <p class="opt D"><span class="op"></span><span class="cont"></span></p>
+    <div class="question">
+        <div class="title" id="questionTitle">加载中...</div>
+        <div class="opt" data-op="A"></div>
+        <div class="opt" data-op="B"></div>
+        <div class="opt" data-op="C"></div>
+        <div class="opt" data-op="D"></div>
     </div>
+    <!--<div class="analysis" id="analysis">解析：<span></span></div>-->
+    <div class="footer">倒计时: <span id="time">10</span> 秒</div>
 
-    <div class="analysis" style="display: none;">解析：<p></p></div>
-    <div class="footer"><img src="./images/countdown.png" >倒计时<div id="time">10</div></div>
-    </div>
-</div>
-</body>
-<script src="js/jquery-1.10.1.min.js"></script>
-<script src="js/ws.js"></script>
-<script>
+    <script src="js/jquery-1.10.1.min.js"></script>
+    <script src="js/config.js"></script>
+    <script>
+        let user = JSON.parse(localStorage.user1 || '{}');
+        if (user.headurl) document.getElementById('userImg').src = user.headurl;
 
-    var optionsss="";
-    var da=[],index = 0,time=0,showDjs=0;
-    var lastmsg='';
-    var lock=0;
-    var dtotal = 0;
-    var type=0;
-    var jx_time=5;
-    var users=[JSON.parse(window.localStorage.user1),JSON.parse(window.localStorage.user2),JSON.parse(window.localStorage.user3)];
-    var res=JSON.parse(window.localStorage.questionArr)
-    for(var i in res){
-        dtotal = dtotal + parseInt(res[i].score);
-    }
-    localStorage.dtotal = dtotal;
-    localStorage.queslength = res.length;
-    da = res;
+        let questionIndex = 0;
+        let score = 0;
+        let timer;
+        const questions = JSON.parse(localStorage.questionArr || '[]');
 
-    showHeadImg();
-    nextQuestion(0);
-
-    function showHeadImg(){
-        for (u in users){
-            if (users[u]!=null){
-                $('#img'+u).attr('src',users[u].headurl);
-            }else{
-                $('#img'+u).attr('src','./images/jingcha.png');
-            }
-        }
-    }
-
-    function nextQuestion(index){
-        $('p.opt').siblings().removeClass("active");
-        if(index == da.length){
-
-            localStorage.totalNum1 = $(".user1 .totalNum span").text();
-            localStorage.corrNum1 = $(".user1 .corrNum span").text();
-            localStorage.score1 = $(".user1 .score").text();
-
-            localStorage.totalNum2 = $(".user2 .totalNum span").text();
-            localStorage.corrNum2 = $(".user2 .corrNum span").text();
-            localStorage.score2 = $(".user2 .score").text();
-
-            localStorage.totalNum3 = $(".user3 .totalNum span").text();
-            localStorage.corrNum3 = $(".user3 .corrNum span").text();
-            localStorage.score3 = $(".user3 .score").text();
-
-            window.location.href = "./tripleResult.html";
-        }
-        showDjs = 1;
-        time = 11;
-        lastmsg='';
-        lock=0;
-        setQuestion(index);
-        getRandomCode();
-    }
-    function setQuestion(i){
-        $(".opt span").text("");
-        $(".content .title").text(da[i].question);
-        var options = JSON.parse(da[i].options);
-        if(options.length>2){
-            type=1;
-            $(".A .op").text(options[0].option);
-            $(".A .cont").text("、"+options[0].content);
-            $(".B .op").text(options[1].option);
-            $(".B .cont").text("、"+options[1].content);
-            $(".C .op").text(options[2].option);
-            $(".C .cont").text("、"+options[2].content);
-            $(".D .op").text(options[3].option);
-            $(".D .cont").text("、"+options[3].content);
-        }else{
-            type=2;
-            $(".A .op").text(options[0].option);
-            $(".A .cont").text("、"+options[0].content);
-            $(".B .op").text(options[1].option);
-            $(".B .cont").text("、"+options[1].content);
-        }
-    }
-
-    function showJX(i){
-
-        $(".footer").show();
-        $(".analysis").show();
-        $(".analysis p").text(da[i].analysis);
-
-        jx_time=5;
-        $('#time').text(jx_time);
-        jx_timer=setInterval("--jx_time;$('#time').text(jx_time);",1000)
-
-        setTimeout(function(){
-            index = index+1;
-            $(".analysis").hide();
-            $(".container").removeClass("correct").removeClass("error");
-            clearInterval(jx_timer);
-            nextQuestion(index);
-        },6000)
-
-
-
-    }
-
-    //倒计时
-    function getRandomCode() {
-        if(showDjs == 0){
-            // $(".footer").hide();
-            return;
-        }else{
-            $(".footer").show();
-        }
-        if (time == 0) {
-            // $('.container').addClass('error');
-            // $(".top_left .errNum span").text(parseInt($(".top_left .errNum span").text()) + 1);
-            // $(".top_right .errNum span").text(parseInt($(".top_right .errNum span").text()) + 1);
-
-            $(".container").removeClass("correct").removeClass("error");
-            showJX(index)
-            return;
-        } else {
-            time--;
-            $('#time').text(time);
-        }
-        setTimeout(function() {
-            getRandomCode();
-        },1000);
-    }
-
-
-    ws.onmessage=function(data){
-        if(data.data == "connect success"){
-            return;
-        }
-
-        var data = data.data;
-        var user = data.substr(0,1);
-        var choose = data.substr(data.length-1,1);
-		
-		console.log(data.data)
-		
-        if (type==2){
-            if (choose=='C' || choose=='D'){
+        function renderQuestion(i) {
+            if (!questions[i]) {
+                localStorage.setItem('score1', score);
+                localStorage.setItem('totalNum1', document.getElementById('total').innerText);
+                localStorage.setItem('corrNum1', document.getElementById('correct').innerText);
+                localStorage.setItem('user1', JSON.stringify(user));
+                location.href = 'tripleResult.html';
                 return;
             }
-        }
-
-        if(data.data==lastmsg || lock==1){
-            return;
-        }else{
-            lastmsg=data.data;
-            lock=1;
-        }
-
-
-        // $(".footer").hide();
-        showDjs = 0;
-        $("p.opt").each(function(){
-            if(choose == $(this).find(".op").text()){
-                $(this).addClass("active").siblings().removeClass("active")
+            const q = questions[i];
+            document.getElementById('questionTitle').innerText = q.question;
+            const opts = JSON.parse(q.options);
+            $('.opt').hide().removeClass('active');
+            for (let j = 0; j < opts.length; j++) {
+                const el = $('.opt').eq(j);
+                el.text(opts[j].option + '、' + opts[j].content);
+                el.attr('data-answer', opts[j].option);
+                el.show();
             }
+            $('#analysis').hide();
+            startTimer();
+        }
+
+        function startTimer() {
+            let t = 10;
+            $('#time').text(t);
+            clearInterval(timer);
+            timer = setInterval(() => {
+                t--;
+                $('#time').text(t);
+                if (t <= 0) {
+                    clearInterval(timer);
+                    showAnalysis();
+                }
+            }, 1000);
+        }
+
+        $('.opt').click(function() {
+            if ($(this).hasClass('active')) return;
+            clearInterval(timer);
+            $('.opt').removeClass('active');
+            $(this).addClass('active');
+            const answer = questions[questionIndex].answer;
+            const selected = $(this).attr('data-answer');
+            $('#total').text(+$('#total').text() + 1);
+            if (selected === answer) {
+                $('#correct').text(+$('#correct').text() + 1);
+                score += parseInt(questions[questionIndex].score);
+                $('#score').text(score);
+            } else {
+                $('#wrong').text(+$('#wrong').text() + 1);
+            }
+            showAnalysis();
         });
-        if(user == 1){
-            $(".user1 .totalNum span").text(parseInt($(".user1 .totalNum span").text()) + 1);
-            if(choose == da[index].answer){
-                $(".user1 .corrNum span").text(parseInt($(".user1 .corrNum span").text()) + 1);
-                $(".user1 .score").text(parseInt($(".user1 .score").text()*1 + parseInt(da[index].score)));
-                $('.container').addClass('correct');
-            }else{
-                $(".user1 .errNum span").text(parseInt($(".user1 .errNum span").text()) + 1);
-                $('.container').addClass('error');
-            }
-        }else if(user == 2){
-            $(".user2 .totalNum span").text(parseInt($(".user2 .totalNum span").text()) + 1);
-            if(choose == da[index].answer){
-                $(".user2 .corrNum span").text(parseInt($(".user2 .corrNum span").text()) + 1);
-                $(".user2 .score").text(parseInt($(".user2 .score").text()*1 + parseInt(da[index].score)));
-                $('.container').addClass('correct');
 
-            }else{
-                $(".user2 .errNum span").text(parseInt($(".user2 .errNum span").text()) + 1);
-                $('.container').addClass('error');
-
-            }
-        }else if(user == 3){
-            $(".user3 .totalNum span").text(parseInt($(".user3 .totalNum span").text()) + 1);
-            if(choose == da[index].answer){
-                $(".user3 .corrNum span").text(parseInt($(".user3 .corrNum span").text()) + 1);
-                $(".user3 .score").text(parseInt($(".user3 .score").text()*1 + parseInt(da[index].score)));
-                $('.container').addClass('correct');
-
-            }else{
-                $(".user3 .errNum span").text(parseInt($(".user3 .errNum span").text()) + 1);
-                $('.container').addClass('error');
-
-            }
+        function showAnalysis() {
+            $('#analysis span').text(questions[questionIndex].analysis);
+            $('#analysis').show();
+            setTimeout(() => {
+                questionIndex++;
+                renderQuestion(questionIndex);
+            }, 3000);
         }
 
-        showJX(index);
-    }
-
-    setTimeout("ws.send('browser'),optionsss=''",1000)
-
-</script>
+        renderQuestion(questionIndex);
+    </script>
+</body>
 </html>

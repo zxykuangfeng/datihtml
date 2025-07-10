@@ -1,135 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>试卷列表</title>
-    <link rel="stylesheet" href="css/public.css">
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-        .container {
-            position: relative;
-            min-height: 100vh;
-            background: url(images/bg.jpg) no-repeat center center;
-            background-size: cover;
-            text-align: center;
-        }
-
-        /* 顶部 title */
-        .header {
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            text-align: center;
-        }
-        .header img {
-            height: 80px;
-        }
-
-        /* 中间试卷列表 */
-        .container .row {
-            display: inline-block;
-            width: 50%;
-            margin-top: 25vh;
-        }
-        .container li {
-            background: url(images/subtitle_bg.png) no-repeat center;
-            background-size: contain;
-            height: 12vh;
-            float: left;
-            width: calc(50% - 40px);
-            box-sizing: border-box;
-            position: relative;
-            margin: 0 20px;
-        }
-        .container li a {
-            font-size: 2rem;
-            color: #fff;
-            font-weight: 600;
-            text-align: center;
-            display: inline-block;
-            width: 100%;
-            overflow: hidden;
-            height: 12vh;
-            line-height: 12vh;
-        }
-
-        /* 底部区域 */
-        .footer {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-        }
-        .footer img.bqsy {
-            height: 80px;
-            margin-top: 10px;
-        }
-        .footer .floating-icons {
-            margin-bottom: 10px;
-        }
-        .footer .floating-icons img {
-            /* width: 100px; */
-            margin: 0 20px;
-            transition: transform 0.3s ease, filter 0.3s ease;
-        }
-        .footer .floating-icons img:hover {
-            transform: scale(1.1) translateY(-5px);
-            filter: brightness(1.2);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- 顶部标题 -->
-        <div class="header">
-            <img src="images/title.png" alt="标题">
-        </div>
-
-        <!-- 试卷列表 -->
-        <ul class="row clearfix"></ul>
-
-        <!-- 底部 -->
-        <div class="footer">
-            <div class="floating-icons">
-                <img src="images/dtjfgz.png" alt="图1">
-                <img src="images/dtlhb.png" alt="图2">
-            </div>
-            <img src="images/bqsy.png" alt="版权" class="bqsy">
-        </div>
-    </div>
-</body>
-<script src="js/jquery-1.10.1.min.js"></script>
-<script src="js/ws.js"></script>
-<script>
-    $.ajax({
-        type:"GET",
-        url:localStorage.apiUrl+"/front.examination/getCategoryList",
-        dataType:"json",
-        success:function(data){
-            console.log(data)
-            if(data.length > 0){
-                for(var i in data){
-                    $("ul").append("<li id='next_"+['A','B','C','D'][i]+"'><a href=\"examLevel.html?categoryid="+data[i].id+"\">"+'('+['A','B','C','D'][i]+')'+data[i].name+"</a></li>");
-                }
-            }
-        }
-    });
-
-
-    ws.onmessage=function (data) {
-        data=getWsData(data);
-        href=$('#next_'+data[1]).find('a').attr('href');
-        console.log(666,data,href)
-		if(href.length>0){
-			console.log(href)
-			location.href=href;
-		}
-        
+  <meta charset="UTF-8" />
+  <title>试卷列表</title>
+  <link rel="stylesheet" href="css/public.css" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    .container {
+      position: relative;
+      min-height: 100vh;
+      background: url(images/bg.jpg) no-repeat center center;
+      text-align: center;
+      background-size: cover;
     }
 
-</script>
+    /* 顶部标题 */
+    .header {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .header img {
+      height: 80px;
+    }
+
+    /* 中间试卷区域 */
+    .exam-area {
+      padding-top: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    .exam-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    /*.exam-item {*/
+    /*  position: relative;*/
+    /*  width: 280px;*/
+    /*  height: 230px;*/
+    /*  cursor: pointer;*/
+    /*}*/
+    
+    .exam-item {
+  position: relative;
+  width: 280px;
+  height: 230px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.exam-item:hover {
+  transform: scale(1.05) translateY(-5px);
+  /*box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);*/
+}
+    .exam-item img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+    .exam-item span {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #fff;
+      font-weight: bold;
+      pointer-events: none;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 底部区域 */
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .footer .floating-icons {
+      margin-bottom: 10px;
+    }
+    .footer .floating-icons img {
+      width: 200px;
+      margin: 0 20px;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .footer .floating-icons img:hover {
+      transform: scale(1.1) translateY(-5px);
+      filter: brightness(1.2);
+    }
+    .footer img.bqsy {
+      height: 80px;
+      margin-top: 10px;
+    }
+    
+            /* 弹窗通用样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+       .modal {
+  background: #fff;
+  padding: 30px 20px;
+  width: 90%;
+  max-width: 480px;
+  position: relative;
+  box-sizing: border-box;
+  text-align: left;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  animation: fadeInScale 0.3s ease-in-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal h3 {
+  margin: 0 0 16px;
+  font-size: 1.8rem;
+  text-align: center;
+  color: #333;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.modal .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 2rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.modal .close-btn:hover {
+  color: #333;
+}
+
+.modal p {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  margin: 10px 0;
+  color: #555;
+}
+
+/* 排行榜列表优化 */
+#rankList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: rank;
+}
+#rankList li {
+  position: relative;
+  padding: 10px 12px 10px 36px;
+  margin: 8px 0;
+  background: linear-gradient(90deg, #f5f7fa, #e2e8f0);
+  border-radius: 8px;
+  font-size: 1.4rem;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+#rankList li::before {
+  content: counter(rank);
+  counter-increment: rank;
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  background: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 前三名加特殊颜色 */
+#rankList li:nth-child(1)::before { background: gold; color: #000; }
+#rankList li:nth-child(2)::before { background: silver; color: #000; }
+#rankList li:nth-child(3)::before { background: #cd7f32; color: #000; }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 顶部标题 -->
+    <div class="header">
+      <img src="images/title.png" alt="标题" />
+    </div>
+
+    <!-- 试卷按钮区域 -->
+    <div class="exam-area">
+      <ul class="exam-row row1 clearfix"></ul>
+      <ul class="exam-row row2 clearfix"></ul>
+    </div>
+
+    <!-- 底部图标和版权 -->
+    <div class="footer">
+      <div class="floating-icons">
+        <img src="images/dtjfgz.png" alt="图1" />
+        <img src="images/dtlhb.png" alt="图2" />
+      </div>
+      <img src="images/bqsy.png" alt="版权" class="bqsy" />
+    </div>
+  </div>
+     <div id="ruleOverlay" class="modal-overlay">
+        <div class="modal">
+            <span class="close-btn" id="ruleClose">×</span>
+            <h3>答题计分规则</h3>
+            <p><strong>1. 基础答题规则</strong></p>
+            <p>题目抽取: 每次从题库中随机抽取10题(题库规模可自定义，如100题)</p>
+            <p>限时规则: 每题15秒，超时自动跳过(不得分)</p>
+            <p>基础得分: 答对1题得1分，答错/跳过不得分</p>
+            <p><strong>2. 用时奖励(鼓励快速答题)</strong></p>
+            <p>5秒内答对: 额外+0.5分(总分1.5分/题)</p>
+            <p>10秒内答对: 额外+0.2分(总分1.2分/题)</p>
+            <p>超过10秒: 仅基础1分</p>
+            <p><strong>3. 排名规则(按历史最佳成绩参与)</strong></p>
+            <p>全局排名依据: 取用户历史所有答题记录中的最高分参与全局排名(而非每日最高分或累计分)</p>
+            <p>每日更新: 用户每日可多次答题，系统自动更新其历史最高分</p>
+            <p>同分处理: 首次达到该分的时间更早者靠前；若时间相同，按最近一次答题时间更早者靠前</p>
+        </div>
+    </div>
+
+    <!-- 龙虎榜弹窗 -->
+    <div id="rankOverlay" class="modal-overlay">
+        <div class="modal">
+            <span class="close-btn" id="rankClose">×</span>
+            <h3>答题龙虎榜</h3>
+            <ol id="rankList">
+                <li>1. 张三 - 15分</li>
+                <li>2. 李四 - 14分</li>
+                <li>3. 王五 - 13分</li>
+            </ol>
+        </div>
+    </div>
+  <script src="js/jquery-1.10.1.min.js"></script>
+  <script src="js/ws.js"></script>
+  <script>
+    $.ajax({
+      type: "GET",
+      url: localStorage.apiUrl + "/front.examination/getCategoryList",
+      dataType: "json",
+      success: function (data) {
+        if (data.length > 0) {
+          for (var i = 0; i < data.length; i++) {
+            var li =
+              "<li id='next_" + i + "' class='exam-item'>" +
+              "<a href=\"examLevel.html?categoryid=" + data[i].id + "\">" +
+              "<img src='images/lxbj.png' alt='试卷图'>" +
+              "<span>" + data[i].name + "</span>" +
+              "</a></li>";
+            if (i < 2) {
+              $(".row1").append(li);
+            } else {
+              $(".row2").append(li);
+            }
+          }
+        }
+      }
+    });
+    // 弹窗交互
+    $('.floating-icons img:eq(0)').on('click', function(){
+        $('#ruleOverlay').css('display','flex');
+    });
+    $('#ruleClose').on('click', function(){
+        $('#ruleOverlay').hide();
+    });
+
+    $('.floating-icons img:eq(1)').on('click', function(){
+        $('#rankOverlay').css('display','flex');
+    });
+    $('#rankClose').on('click', function(){
+        $('#rankOverlay').hide();
+    });
+
+    ws.onmessage = function (data) {
+      data = getWsData(data);
+      var href = $('#next_' + data[1]).find('a').attr('href');
+      if (href && href.length > 0) {
+        location.href = href;
+      }
+    };
+  </script>
+</body>
 </html>
